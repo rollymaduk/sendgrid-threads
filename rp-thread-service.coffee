@@ -16,17 +16,12 @@ class RpThreads
     check userId,String
     check @config.baseUrl,String
     check @config.auth,String
-    HTTP.post("#{@config.baseUrl}/identify",{
-        data:
-          userId:userId
-          traits:payload
-          timestamp:new Date().toISOString()
-        auth:@config.auth
-      }
-    ,(err,res)->
-      _resolveResult err,res,callback
+    options=data:{userId:userId,traits:payload,timestamp:new Date().toISOString()},auth:@config.auth
+    if callback
+      HTTP.post("#{@config.baseUrl}/identify",options,(err,res)->_resolveResult err,res,callback)
+    else
+      HTTP.post("#{@config.baseUrl}/identify",options)
 
-    )
 
   track:(event,payload,userId=Meteor.userId(),callback)->
     check payload,Object
@@ -34,17 +29,11 @@ class RpThreads
     check userId,String
     check @config.baseUrl,String
     check @config.auth,String
-    HTTP.post("#{@config.baseUrl}/track",{
-        data:
-          userId:userId
-          event: event
-          timestamp: new Date().toISOString()
-          properties:payload
-        auth:@config.auth
-      }
-    ,(err,res)->
-      _resolveResult err,res,callback
-    )
+    options=data:{userId:userId,event: event,timestamp: new Date().toISOString(),properties:payload},auth:@config.auth
+    if callback
+      HTTP.post("#{@config.baseUrl}/track",options,(err,res)->_resolveResult err,res,callback)
+    else
+      HTTP.post("#{@config.baseUrl}/track",options)
 
 
   page:(name,payload,userId=Meteor.userId(),callback)->
@@ -53,33 +42,23 @@ class RpThreads
     check userId,String
     check @config.baseUrl,String
     check @config.auth,String
-    HTTP.post("#{@config.baseUrl}/page",{
-        data:
-          userId:userId
-          name:name
-          timestamp:new Date().toISOString()
-          properties:payload
-        auth:@config.auth
-      }
-    ,(err,res)->
-      _resolveResult err,res,callback
-    )
+    options=data:{userId:userId,name:name,timestamp: new Date().toISOString(),properties:payload},auth:@config.auth
+    if callback
+      HTTP.post("#{@config.baseUrl}/page",options,(err,res)->_resolveResult err,res,callback)
+    else
+      HTTP.post("#{@config.baseUrl}/page",options)
+
 
 
   remove:(callback)->
     check Meteor.userId(),String
     check @config.baseUrl,String
     check @config.auth,String
-    HTTP.post("#{@config.baseUrl}/remove",{
-        data:
-          userId:Meteor.userId()
-          timestamp:new Date().toISOString()
-        auth:@config.auth
-      }
-    ,(err,res)->
-      _resolveResult err,res,callback
-    )
-
+    options=data:{userId:userId,timestamp: new Date().toISOString()},auth:@config.auth
+    if callback
+      HTTP.post("#{@config.baseUrl}/remove",options,(err,res)->_resolveResult err,res,callback)
+    else
+      HTTP.post("#{@config.baseUrl}/remove",options)
 
 
 
