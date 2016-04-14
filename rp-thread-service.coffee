@@ -68,12 +68,13 @@ Meteor.startup ()->
   if Rp_Threads.config.baseUrl and Rp_Threads.config.auth
     if Meteor.isServer
       Accounts.onLogin (info)->
-        Rp_Threads.identify({email:info.user.emails[0].address},info.user._id,(err,res)->
-          if res
-            Rp_Threads.track('signIn',{email:info.user.emails[0].address},info.user._id,(err,res)->
-              console.log err or res
-            )
-        )
+        Meteor.defer ->
+          Rp_Threads.identify({email:info.user.emails[0].address},info.user._id,(err,res)->
+            if res
+              Rp_Threads.track('signIn',{email:info.user.emails[0].address},info.user._id,(err,res)->
+                console.log err or res
+              )
+          )
 
 
 
